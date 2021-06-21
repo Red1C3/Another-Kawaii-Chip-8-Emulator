@@ -44,8 +44,15 @@ void Renderer::init(int height,int width){
     glBufferData(GL_ELEMENT_ARRAY_BUFFER,6*sizeof(short),emulatedQuadIndices,GL_STATIC_DRAW);
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0,2,GL_SHORT,GL_FALSE,0,0);
+    glGenBuffers(1,&pixelsUBO);
+    glBindBuffer(GL_UNIFORM_BUFFER,pixelsUBO);
+    glBufferData(GL_UNIFORM_BUFFER,32*64*sizeof(GLint),pixels,GL_STATIC_DRAW);
     emulatedQuadShader=createShader("../shaders/emulatedScreen.vert","../shaders/emulatedScreen.frag");
     glUseProgram(emulatedQuadShader);
+    GLuint pixelsUBOIndex=glGetUniformBlockIndex(emulatedQuadShader,"Block");
+    glUniformBlockBinding(emulatedQuadShader,pixelsUBOIndex,0);
+    glBindBufferRange(GL_UNIFORM_BUFFER,0,pixelsUBO,0,32*64*sizeof(GLint));
+
 }
 void Renderer::render(){
     glBindFramebuffer(GL_FRAMEBUFFER,renderFramebuffer);

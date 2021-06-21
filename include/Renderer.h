@@ -13,10 +13,12 @@ namespace akcemu{
         GLFWwindow* window;
         int wHeight,wWidth;
         GLuint renderTexture,renderFramebuffer,emulatedQuadVAO,emulatedQuadVBO,emulatedQuadEBO;
-        short pixels[64][32];
+        GLint pixels[64][32];
         short emulatedQuad[8]={0,0,64,0,0,32,64,32};
         short emulatedQuadIndices[6]={0,1,2,2,1,3};
         GLuint emulatedQuadShader;
+        GLuint pixelBufferLoc;
+        GLuint pixelsUBO;
     public:
         static Renderer& instance();
         void init(int height,int width);

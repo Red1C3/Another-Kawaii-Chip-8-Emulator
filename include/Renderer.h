@@ -12,11 +12,15 @@ namespace akcemu{
         bool isInitialized=false;
         GLFWwindow* window;
         int wHeight,wWidth;
-        GLuint renderTexture,renderFramebuffer,emulatedQuadVAO,emulatedQuadVBO,emulatedQuadEBO;
+        GLuint renderTexture,renderFramebuffer,
+            emulatedQuadVAO,emulatedQuadVBO,emulatedQuadEBO,
+            screenQuadVAO,screenQuadVBO,screenQuadEBO;
         GLint pixels[64][32];
         short emulatedQuad[8]={0,0,64,0,0,32,64,32};
         short emulatedQuadIndices[6]={0,1,2,2,1,3};
-        GLuint emulatedQuadShader;
+        short screenQuad[8]={-1,-1,-1,1,1,-1,1,1};
+        short screenQuadIndices[6]={0,2,1,3,1,2};
+        GLuint emulatedQuadShader,screenQuadShader;
         GLuint pixelBufferLoc;
         GLuint pixelsUBO;
     public:

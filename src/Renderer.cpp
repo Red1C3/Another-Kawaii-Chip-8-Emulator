@@ -52,14 +52,36 @@ void Renderer::init(int height,int width){
     GLuint pixelsUBOIndex=glGetUniformBlockIndex(emulatedQuadShader,"Block");
     glUniformBlockBinding(emulatedQuadShader,pixelsUBOIndex,0);
     glBindBufferRange(GL_UNIFORM_BUFFER,0,pixelsUBO,0,32*64*sizeof(GLint));
+    glGenVertexArrays(1,&screenQuadVAO);
+    glBindVertexArray(screenQuadVAO);
+    glGenBuffers(1,&screenQuadVBO);
+    glGenBuffers(1,&screenQuadEBO);
+    glBindBuffer(GL_ARRAY_BUFFER,screenQuadVBO);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,screenQuadEBO);
+    glBufferData(GL_ARRAY_BUFFER,8*sizeof(short),screenQuad,GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER,6*sizeof(short),screenQuadIndices,GL_STATIC_DRAW);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0,2,GL_SHORT,GL_FALSE,0,0);
+    screenQuadShader=createShader("../shaders/screen.vert","../shaders/screen.frag");
+    for(int i=0;i<64;++i)
+        for(int j=0;j<32;++j)
+            pixels[i][j]=1;
 
 }
 void Renderer::render(){
+    glBufferSubData(GL_UNIFORM_BUFFER,0,32*64*sizeof(GLint),pixels);
     glBindFramebuffer(GL_FRAMEBUFFER,renderFramebuffer);
     glViewport(0,0,64,32);
     glClearColor(0,0,0,1);
     glClear(GL_COLOR_BUFFER_BIT);
     glBindVertexArray(emulatedQuadVAO);
+    glUseProgram(emulatedQuadShader);
+    glDrawElements(GL_TRIANGLES,6,GL_UNSIGNED_SHORT,0);
+    glBindFramebuffer(GL_FRAMEBUFFER,0);
+    glViewport(0,0,wWidth,wHeight);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glBindVertexArray(screenQuadVAO);
+    glUseProgram(screenQuadShader); //TODO sample from 1st fb texture
     glDrawElements(GL_TRIANGLES,6,GL_UNSIGNED_SHORT,0);
     glfwSwapBuffers(window);
     glfwPollEvents();

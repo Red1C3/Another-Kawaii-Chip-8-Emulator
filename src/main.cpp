@@ -2,7 +2,7 @@
 #include<Renderer.h>
 using namespace akcemu;
 int main(){
-    RENDERER.init(320,640);
+    RENDERER.init(640,1280);
     while(!glfwWindowShouldClose(RENDERER.getWindow())){
        RENDERER.render();
     }

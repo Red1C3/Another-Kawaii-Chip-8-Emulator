@@ -129,6 +129,21 @@ GLuint Renderer::createShader(const char* vertexShaderPath,const char* fragmentS
     glDeleteShader(fragmentShader);
     return program;
 }
+void Renderer::setPixel(int x,int y,int val){
+    pixels[x][y]=val;
+}
+void Renderer::flipPixel(int x,int y){
+    if(pixels[x][y]){
+        pixels[x][y]=0;
+    }else{
+        pixels[x][y]=1;
+    }
+}
+void Renderer::clearScreen(){
+    for(int i=0;i<64;++i)
+        for(int j=0;j<32;++j)
+            pixels[i][j]=0;
+}
 GLFWwindow* Renderer::getWindow(){
     return window;
 }

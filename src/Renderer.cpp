@@ -140,6 +140,7 @@ bool Renderer::setPixel(int x,int y){
     }else if(y<0){
         y+=31;
     }
+    x--;
     y=31-y;
     pixels[x][y]^=1;
     return !pixels[x][y];

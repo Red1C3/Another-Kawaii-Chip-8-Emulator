@@ -65,9 +65,6 @@ void Emulator::cycle(){
 }
 void Emulator::executeInstruction(unsigned short opcode){
     programCounter+=2;
-    if(programCounter==540){
-        //LOG.log("540");
-    }
     unsigned char x=(opcode&0x0F00)>>8;
     unsigned char y=(opcode&0x00F0)>>4;
     switch (opcode & 0xF000) {
@@ -255,17 +252,14 @@ void Emulator::executeInstruction(unsigned short opcode){
     }
 }
 void Emulator::updateTimers(){
-    timersTicker++;
-    if(timersTicker>=1){
+    
         if(delayTimer>0){
             delayTimer--;
         }
         if(soundTimer>0){
             soundTimer--;
         }
-        timersTicker=0;
-        //LOG.log("TICKED!");
-    }
+    
 }
 void Emulator::playSound(){
     if(soundTimer>0){

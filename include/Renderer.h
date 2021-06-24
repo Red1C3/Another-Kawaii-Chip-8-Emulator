@@ -29,7 +29,7 @@ namespace akcemu{
         void render();
         void terminate();
         GLFWwindow* getWindow();
-        void setPixel(int x,int y,int val);
+        bool setPixel(int x,int y);
         void flipPixel(int x,int y);
         void clearScreen();
         static GLuint createShader(const char* vertexShaderPath,const char* fragmentShaderPath);

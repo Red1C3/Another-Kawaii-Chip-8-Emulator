@@ -129,9 +129,20 @@ GLuint Renderer::createShader(const char* vertexShaderPath,const char* fragmentS
     glDeleteShader(fragmentShader);
     return program;
 }
-void Renderer::setPixel(int x,int y,int val){
+bool Renderer::setPixel(int x,int y){
+    if(x>63){
+        x-=63;
+    }else if(x<0){
+        x+=63;
+    }
+    if(y>31){
+        y-=31;
+    }else if(y<0){
+        y+=31;
+    }
     y=31-y;
-    pixels[x][y]=val;
+    pixels[x][y]^=1;
+    return !pixels[x][y];
 }
 void Renderer::flipPixel(int x,int y){
     y=31-y;

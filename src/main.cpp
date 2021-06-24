@@ -8,7 +8,7 @@ int main(){
     RENDERER.init(640,1280);
     initInput(RENDERER.getWindow());
     SPEAKER.init();
-    EMULATOR.init(1,"../Assets/pong.ch8");
+    EMULATOR.init(0,"../Assets/pong.ch8");
     while(!glfwWindowShouldClose(RENDERER.getWindow())){
         EMULATOR.cycle();
     }

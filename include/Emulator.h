@@ -12,7 +12,7 @@ namespace akcemu{
         unsigned char registers[16];
         unsigned char delayTimer=0,soundTimer=0;
         unsigned short registerI,programCounter=0x200;
-        std::stack<int> emuStack;
+        std::stack<unsigned short> emuStack;
         bool paused=false;
         int executionSpeed;
         void loadHexaSprites();

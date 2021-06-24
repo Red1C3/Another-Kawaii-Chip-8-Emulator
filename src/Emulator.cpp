@@ -63,7 +63,170 @@ void Emulator::cycle(){
     
 }
 void Emulator::executeInstruction(unsigned short opcode){
-    
+    unsigned char x=(opcode&0x0F00)>>8;
+    unsigned char y=(opcode&0x00F0)>>4;
+    switch (opcode & 0xF000) {
+    case 0x0000:
+        switch (opcode) {
+            case 0x00E0:
+                RENDERER.clearScreen();
+                break;
+            case 0x00EE:
+                programCounter=emuStack.top();
+                emuStack.pop();
+                break;
+        }
+
+        break;
+    case 0x1000:
+        programCounter=(opcode&0xFFF);
+        break;
+    case 0x2000:
+        emuStack.push(programCounter);
+        programCounter=(opcode&0xFFF);
+        break;
+    case 0x3000:
+        if(registers[x]==(opcode&0xFF)){
+            programCounter+=2;
+        }
+        break;
+    case 0x4000:
+        if(registers[x]!=(opcode&0xFF)){
+            programCounter+=2;
+        }
+        break;
+    case 0x5000:
+        if(registers[x]==registers[y]){
+            programCounter+=2;
+        }
+        break;
+    case 0x6000:
+        registers[x]=(opcode&0xFF);
+        break;
+    case 0x7000:
+        registers[x]+=(opcode&0xFF);
+        break;
+    case 0x8000:
+        switch (opcode & 0xF) {
+            case 0x0:
+                registers[x]=registers[y];
+                break;
+            case 0x1:
+                registers[x]|=registers[y];
+                break;
+            case 0x2:
+                registers[x]&=registers[y];
+                break;
+            case 0x3:
+                registers[x]^=registers[y];
+                break;
+            case 0x4:
+            {
+                unsigned int sum=(unsigned int)registers[x]+(unsigned int)registers[y]; //watch for conversions
+                registers[0xF]=0;
+                if(sum>0xFF){
+                    registers[0xF]=1;
+                }
+                registers[x]=sum&0xFF;
+                break;
+            }
+            case 0x5:
+                registers[0xF]=0;
+                if(registers[x]>registers[y]){
+                    registers[0xF]=1;
+                }
+                registers[x]-=registers[y];
+                break;
+            case 0x6:
+                registers[0xF]=(registers[x]&0x1);
+                registers[x]>>=1;
+                break;
+            case 0x7:
+                registers[0xF]=0;
+                if(registers[y]>registers[x]){
+                    registers[0xF]=1;
+                }
+                registers[x]=registers[y]-registers[x];
+                break;
+            case 0xE:
+                registers[0xF]=((registers[x]&0x80)>>7);
+                registers[x]<<=1;
+                break;
+        }
+
+        break;
+    case 0x9000:
+        if(registers[x]!=registers[y]){
+            programCounter+=2;
+        }
+        break;
+    case 0xA000:
+        registerI=(opcode&0xFFF);
+        break;
+    case 0xB000:
+        programCounter=(opcode&0xFFF)+registers[0]; //watch for conversions
+        break;
+    case 0xC000:
+    {
+        unsigned char rand=std::rand()%256;
+        registers[x]=(rand&(opcode&0xFF));
+        break;
+    }
+    case 0xD000:
+    {
+        unsigned short width=8;
+        unsigned short height=(opcode&0xF);
+        registers[0xF]=0;
+        for(unsigned short row=0;row<height;++row){
+            unsigned char sprite=memory[registerI+row];
+            for(unsigned char col=0;col<width;++col){
+                if((sprite&0x80)>0){
+                    if(RENDERER.setPixel(registers[x]+col,registers[y]+row)){
+                        registers[0xF]=1;
+                    }
+                }
+                sprite<<=1;
+            }
+        }
+        break;
+    }
+    case 0xE000:
+        switch (opcode & 0xFF) {
+            case 0x9E:
+                break;
+            case 0xA1:
+                break;
+        }
+
+        break;
+    case 0xF000:
+        switch (opcode & 0xFF) {
+            case 0x07:
+                break;
+            case 0x0A:
+                break;
+            case 0x15:
+                break;
+            case 0x18:
+                break;
+            case 0x1E:
+                break;
+            case 0x29:
+                break;
+            case 0x33:
+                break;
+            case 0x55:
+                break;
+            case 0x65:
+                break;
+        }
+
+        break;
+
+    default:
+        LOG.error("Unknown instruction:"+std::to_string(opcode));
+        break;
+    }
     programCounter+=2;
 }
 void Emulator::updateTimers(){

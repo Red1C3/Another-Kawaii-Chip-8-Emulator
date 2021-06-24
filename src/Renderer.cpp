@@ -130,9 +130,11 @@ GLuint Renderer::createShader(const char* vertexShaderPath,const char* fragmentS
     return program;
 }
 void Renderer::setPixel(int x,int y,int val){
+    y=31-y;
     pixels[x][y]=val;
 }
 void Renderer::flipPixel(int x,int y){
+    y=31-y;
     if(pixels[x][y]){
         pixels[x][y]=0;
     }else{

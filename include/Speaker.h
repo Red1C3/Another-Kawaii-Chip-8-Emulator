@@ -11,5 +11,6 @@ namespace akcemu{
         static Speaker& instance();
         void init();
         void play();
+        void stop();
     };
 }

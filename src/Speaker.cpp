@@ -15,3 +15,6 @@ void Speaker::init(){
 void Speaker::play(){
     sounder.play();
 }
+void Speaker::stop(){
+    sounder.stop();
+}

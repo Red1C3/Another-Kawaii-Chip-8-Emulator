@@ -6,8 +6,9 @@ Emulator& Emulator::instance(){
     static Emulator emulator;
     return emulator;
 }
-void Emulator::init(int executionSpeed,string romPath){
+void Emulator::init(int executionSpeed,string romPath,bool keys[16]){
     this->executionSpeed=executionSpeed;
+    this->keys=keys;
     loadHexaSprites();
     loadRomIntoRam(romPath);
 }
@@ -63,6 +64,10 @@ void Emulator::cycle(){
     
 }
 void Emulator::executeInstruction(unsigned short opcode){
+    programCounter+=2;
+    if(programCounter==540){
+        //LOG.log("540");
+    }
     unsigned char x=(opcode&0x0F00)>>8;
     unsigned char y=(opcode&0x00F0)>>4;
     switch (opcode & 0xF000) {
@@ -193,8 +198,14 @@ void Emulator::executeInstruction(unsigned short opcode){
     case 0xE000:
         switch (opcode & 0xFF) {
             case 0x9E:
+                if(keys[registers[x]]){
+                    programCounter+=2;
+                }
                 break;
             case 0xA1:
+                if(!keys[registers[x]]){
+                    programCounter+=2;
+                }
                 break;
         }
 
@@ -202,22 +213,37 @@ void Emulator::executeInstruction(unsigned short opcode){
     case 0xF000:
         switch (opcode & 0xFF) {
             case 0x07:
+                registers[x]=delayTimer;
                 break;
             case 0x0A:
+                INPUT.pause(&registers[x]);
                 break;
             case 0x15:
+                delayTimer=registers[x];
                 break;
             case 0x18:
+                soundTimer=registers[x];
                 break;
             case 0x1E:
+                registerI+=(unsigned short)registers[x]; //watch for conversions
                 break;
             case 0x29:
+                registerI=(unsigned short) registers[x]*5; //watch for conversions
                 break;
             case 0x33:
+                memory[registerI]=registers[x]/100;
+                memory[registerI+1]=(registers[x]%100)/10;
+                memory[registerI+2]=registers[x]%10;
                 break;
             case 0x55:
+                for(int i=0;i<=x;++i){
+                    memory[registerI+i]=registers[i];
+                }
                 break;
             case 0x65:
+                for(int i=0;i<=x;++i){
+                    registers[i]=memory[registerI+i];
+                }
                 break;
         }
 
@@ -227,11 +253,10 @@ void Emulator::executeInstruction(unsigned short opcode){
         LOG.error("Unknown instruction:"+std::to_string(opcode));
         break;
     }
-    programCounter+=2;
 }
 void Emulator::updateTimers(){
     timersTicker++;
-    if(timersTicker>=60){
+    if(timersTicker>=1){
         if(delayTimer>0){
             delayTimer--;
         }
@@ -239,7 +264,7 @@ void Emulator::updateTimers(){
             soundTimer--;
         }
         timersTicker=0;
-        LOG.log("TICKED!");
+        //LOG.log("TICKED!");
     }
 }
 void Emulator::playSound(){

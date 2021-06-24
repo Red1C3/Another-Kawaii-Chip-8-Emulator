@@ -5,6 +5,7 @@
 #include<Common.h>
 #include<Renderer.h>
 #include<Speaker.h>
+#include<Input.h>
 namespace akcemu{
     class Emulator{
         Emulator();
@@ -13,7 +14,6 @@ namespace akcemu{
         unsigned char delayTimer=0,soundTimer=0;
         unsigned short registerI,programCounter=0x200;
         std::stack<unsigned short> emuStack;
-        bool paused=false;
         int executionSpeed;
         void loadHexaSprites();
         void loadRomIntoRam(std::string romPath);
@@ -21,9 +21,11 @@ namespace akcemu{
         void updateTimers();
         void playSound();
         int timersTicker=0;
+        bool* keys;
     public:
+        bool paused=false;
         static Emulator& instance();
-        void init(int executionSpeed,std::string romPath);
+        void init(int executionSpeed,std::string romPath,bool keys[16]);
         void dumpMemory();
         void cycle();
     };

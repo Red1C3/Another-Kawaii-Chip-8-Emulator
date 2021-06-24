@@ -6,9 +6,10 @@
 using namespace akcemu;
 int main(){
     RENDERER.init(640,1280);
-    initInput(RENDERER.getWindow());
+    bool keys[16];
     SPEAKER.init();
-    EMULATOR.init(0,"../Assets/pong.ch8");
+    EMULATOR.init(10,"../Assets/pong.ch8",keys);
+    INPUT.init(RENDERER.getWindow(),keys,&EMULATOR.paused);
     while(!glfwWindowShouldClose(RENDERER.getWindow())){
         EMULATOR.cycle();
     }

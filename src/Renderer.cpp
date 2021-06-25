@@ -1,3 +1,24 @@
+/*MIT License
+
+Copyright (c) 2021 Mohammad Issawi
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.*/
 #include<Renderer.h>
 using namespace akcemu;
 using namespace glm;
@@ -66,6 +87,7 @@ void Renderer::init(int height,int width){
     glClearColor(0,0,0,1);
 }
 void Renderer::render(){
+    /*First Pass Renders to a 64x32 texture*/
     glBufferSubData(GL_UNIFORM_BUFFER,0,32*64*sizeof(GLint),pixels);
     glBindFramebuffer(GL_FRAMEBUFFER,renderFramebuffer);
     glViewport(0,0,64,32);
@@ -73,6 +95,7 @@ void Renderer::render(){
     glBindVertexArray(emulatedQuadVAO);
     glUseProgram(emulatedQuadShader);
     glDrawElements(GL_TRIANGLES,6,GL_UNSIGNED_SHORT,0);
+    /*Second Pass Renders to screen*/
     glBindFramebuffer(GL_FRAMEBUFFER,0);
     glViewport(0,0,wWidth,wHeight);
     glClear(GL_COLOR_BUFFER_BIT);
@@ -145,14 +168,6 @@ bool Renderer::setPixel(int x,int y){
     pixels[x][y]^=1;
     return !pixels[x][y];
 }
-void Renderer::flipPixel(int x,int y){
-    y=31-y;
-    if(pixels[x][y]){
-        pixels[x][y]=0;
-    }else{
-        pixels[x][y]=1;
-    }
-}
 void Renderer::clearScreen(){
     for(int i=0;i<64;++i)
         for(int j=0;j<32;++j)
@@ -162,8 +177,6 @@ GLFWwindow* Renderer::getWindow(){
     return window;
 }
 void Renderer::terminate(){
-    LOG.log("OpenGL exited with code:");
-    LOG.log(std::to_string(glGetError()));
     glfwDestroyWindow(window);
     glfwTerminate();
 }

@@ -1,4 +1,4 @@
-/*MIT License
+MIT License
 
 Copyright (c) 2021 Mohammad Issawi
 
@@ -18,23 +18,4 @@ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.*/
-#include<Common.h>
-using namespace akcemu;
-using namespace std;
-vector<char> akcemu::readBin(const char* path){
-    fstream fileStream(path,ios::in|ios::binary|ios::ate);
-    if(fileStream.is_open()){
-        int size=fileStream.tellg();
-        vector<char> data;
-        data.resize(size);
-        fileStream.seekg(0,ios::beg);
-        fileStream.read(data.data(),size);
-        fileStream.flush();
-        fileStream.close();
-        return data;
-    }else{
-        LOG.error("Failed to open file at",false);
-        LOG.error(path);
-    }
-}
+SOFTWARE.

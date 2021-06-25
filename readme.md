@@ -10,6 +10,8 @@ or if you want to specify a resolution
 ./akcemu <height> <width> <your rom name>.ch8
 ```
 if any errors occured, a log file will auto-generate containing what error happened
+### Key Bindings
+The emulators uses keyboard keys {1,2,3,4,Q,W,E,R,A,S,D,F,Z,X,C,V} , although not tested in other layouts, it's recommended to change it to English before running the emulator
 ## Runtime Prerequisites
 - [GLFW](https://www.glfw.org/) runtime libraries
 - [GLEW](http://glew.sourceforge.net/) runtime libraries

@@ -22,7 +22,7 @@ if any errors occured, a log file will auto-generate containing what error happe
 
 With Meson Build System and prerequisites installed on your machine, run:
 ```
-meson builddir
+meson builddir --buildtype=release
 cd builddir
 ninja
 ```

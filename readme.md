@@ -11,7 +11,7 @@ or if you want to specify a resolution
 ```
 if any errors occured, a log file will auto-generate containing what error happened
 ### Key Bindings
-The emulators uses keyboard keys {1,2,3,4,Q,W,E,R,A,S,D,F,Z,X,C,V} , although not tested in other layouts, it's recommended to change it to English before running the emulator
+The emulator uses keyboard keys {1,2,3,4,Q,W,E,R,A,S,D,F,Z,X,C,V} , although not tested in other languages' layouts, it's recommended to change your keyboard language to English before running the emulator
 ## Runtime Prerequisites
 - [GLFW](https://www.glfw.org/) runtime libraries
 - [GLEW](http://glew.sourceforge.net/) runtime libraries

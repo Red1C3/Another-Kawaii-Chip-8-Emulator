@@ -1,9 +1,9 @@
 # Another-Kawaii-Chip-8-Emulator
 AKCemu for short, is a Chip-8 emulator made with C++ using OpenGL 3.3 as its graphics backend, it also uses SFML audio module for sounds, and GLFW for windowing and input handling
 ## Usage
-From terminal run:
+From terminal opened inside "bin" folder run:
 ```
-./akcemu <your rom name>.ch8
+./akcemu ../<your rom name>.ch8
 ```
 or if you want to specify a resolution
 ```
